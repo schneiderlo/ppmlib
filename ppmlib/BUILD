@@ -7,34 +7,33 @@ load(
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "utils",
+    name = "ppm",
     hdrs = [
-        "utils.h",
+        "types.h",
+        "color.h",
+        "ppm.h",
     ],
     srcs = [
-        "utils.cc",
+        "color.cc",
+        "ppm.cc"
     ],
     copts = PROJECT_DEFAULT_COPTS,
 )
 
-cc_binary(
-    name = "main",
-    srcs = [
-        "main.cc",
-    ],
-    copts = PROJECT_DEFAULT_COPTS,
-    deps = [
-        ":utils",
-    ],
-)
+TEST_FILES = [
+    "color",
+    "ppm",
+]
 
-cc_test(
-    name = "main-test",
+[cc_test(
+    name = test_file + "-test",
     srcs = [
-        "main_test.cc",
+        test_file + "_test.cc"
     ],
     copts = PROJECT_DEFAULT_COPTS,
+    defines = ["CATCH_CONFIG_MAIN"],
     deps = [
-        ":utils",
+        ":ppm",
+        "@catch2//:catch2"
     ],
-)
+) for test_file in TEST_FILES]
